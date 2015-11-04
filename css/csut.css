@@ -1,0 +1,578 @@
+html, body {
+    width:100%;
+    height: 100%;
+    overflow:hidden;
+    margin:auto;
+}
+body {
+    text-align: left;
+    background-color:#777;
+    overflow:hidden;
+    font-size: 0.9em;	
+    font-family: 'Open Sans', sans-serif;
+}
+.expanded-map {
+    width:100% !important;
+}
+#map {
+    height:100%;
+    width:70%;
+    max-width:100%;
+}
+#map.leaflet-container
+{
+    cursor:pointer;
+}
+#csut-navbar.navbar
+{
+    margin:0;
+    border-bottom:1px solid #ccc;
+    background-color:#0191C8;
+}
+#csut-navbar.navbar *.tooltip *
+{
+    color: white;
+}
+#csut-navbar.navbar li *
+{
+    color:black;
+    font-weight:600;
+}
+#csut-navbar.navbar li *:hover
+{
+    color:white;
+}
+#csut-navbar.navbar ul.dropdown-menu li :hover
+{
+    color:black;
+}
+#csut-main
+{
+    position:absolute;
+    right:0;
+    height:90%;
+    width: 30%;
+    overflow:auto;
+    padding: 0.5em;
+}
+#preloader
+{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: #fff url("../img/loading_big.gif") no-repeat center center;
+    position: absolute;
+    z-index: 999;
+}
+#info-pane
+{
+    clear:both;
+    border: 0.2em solid #ccc;
+    margin: 0.2em;
+    margin: 0.2em;
+    overflow: auto;
+}
+#csu-logo-container
+{
+    left:10px;
+    top:25px;
+    opacity:0.6;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+#csu-logo
+{
+    width:50px;
+    height:50px;
+}
+#centroid-logo-container
+{
+    right:10px;
+    bottom:10px;
+    opacity:0.6;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+#centroid-logo
+{
+    border-radius: 8px;
+}
+#toggle-side-panel
+{
+    position:absolute;
+    z-index:9;
+    right:1em;
+    padding:5px;
+    background-color:white;
+    opacity:0.7;
+    border-radius: 8px;
+}
+ul#csut-tabs.nav.nav-tabs
+{
+    border-bottom: 2px solid #ccc;
+}
+ul#csut-tabs li a
+{
+    color: black;
+    font-weight:700;
+    font-size:1.2em;
+}
+ul#csut-tabs li a:hover
+{
+    color: #004120;
+}
+ul#csut-tabs li.active a
+{
+    border-bottom: 4px solid #004120 !important;
+    color: #004120;
+}
+#search-box
+{
+    width: 300px;
+    font-weight: 900;
+}
+#search-box:hover
+{
+    color:black !important;
+}
+#search-icon
+{
+    margin:8px;
+}
+.csut-container
+{
+    background-color: white;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    padding: 0.3em;
+    margin-bottom: 0.2em;
+}
+.csut-list-item
+{
+    border-top: 1px dotted gray;
+    border-bottom: 1px dotted gray;
+}
+.csut-loading
+{
+    height:60px;
+    margin: 0;
+    padding: 0;
+    background: #fff url("../img/loading.gif") no-repeat center center;
+}
+.csut-search-loading
+{
+    height:26px;
+    width:26px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin:8px;
+    display:inline-block;
+    background: #fff url("../img/loading.gif") no-repeat center center;
+}
+.csut-icon {
+    display: inline-block;
+    background-image: url(../img/csut-icon-sprite.png);
+    background-repeat: no-repeat;
+}
+.csut-icon.csut-icon-map-satellite {
+    background-position: -0px -0px;
+    height: 50px;
+    width: 50px
+}
+
+.csut-icon.csut-icon-map-topo {
+    background-position: -50px -0px;
+    height: 50px;
+    width: 50px
+}
+
+.csut-icon.csut-icon-facility {
+    background-position: -0px -50px;
+    height: 26px;
+    width: 18px
+}
+
+.csut-icon.csut-icon-back {
+    background-position: -18px -50px;
+    height: 23px;
+    width: 16px
+}
+
+.csut-icon.csut-icon-map-search {
+    background-position: -34px -50px;
+    height: 22px;
+    width: 22px
+}
+
+.csut-icon.csut-icon-map-zoom-to {
+    background-position: -56px -50px;
+    height: 22px;
+    width: 22px
+}
+
+.csut-icon.csut-icon-expand {
+    background-position: -78px -50px;
+    height: 19px;
+    width: 19px
+}
+
+.csut-icon.csut-icon-collapse {
+    background-position: -0px -76px;
+    height: 19px;
+    width: 19px
+}
+
+.csut-icon.csut-icon-check {
+    background-position: -19px -76px;
+    height: 18px;
+    width: 19px
+}
+
+.csut-icon.csut-icon-uncheck {
+    background-position: -38px -76px;
+    height: 18px;
+    width: 18px
+}
+
+.csut-icon.csut-icon-info-white {
+    background-position: -56px -76px;
+    height: 16px;
+    width: 15px
+}
+
+.csut-icon.csut-icon-search {
+    background-position: -71px -76px;
+    height: 13px;
+    width: 13px
+}
+
+.csut-icon.csut-icon-info {
+    background-position: -84px -76px;
+    height: 12px;
+    width: 12px
+}
+
+.csut-icon.csut-icon-zoom-globe {
+    background-position: -100px -0px;
+    height: 12px;
+    width: 12px
+}
+
+.csut-icon.csut-icon-file {
+    background-position: -100px -12px;
+    height: 12px;
+    width: 9px
+}
+
+.csut-icon.csut-icon-chevron-left {
+    background-position: -100px -24px;
+    height: 12px;
+    width: 8px
+}
+
+.csut-icon.csut-icon-chevron-right {
+    background-position: -100px -36px;
+    height: 12px;
+    width: 8px
+}
+.csut-floater
+{
+    position:absolute;
+    z-index:99;
+}
+.csut-floater:hover
+{
+    cursor:default;
+}
+.csut-space
+{
+    margin:0.5em;
+}
+#csut-header-title
+{
+    font-size:1.4em;
+    margin:0.2em;
+}
+#info-pane.county-info
+{
+    border-color: #064780;
+}
+#info-pane.cong-dist-info
+{
+    border-color: #F36900;
+}
+#info-pane.state-info
+{
+    border-color: #004120;
+}
+#info-pane.facility-info
+{
+    border-color: black;
+}
+.info-container
+{
+    line-height: 2em;
+    padding:2px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.county-info-container
+{
+    border-color:#064780;
+}
+.cong-dist-info-container
+{
+    border-color:#F36900;
+}
+.state-info-container
+{
+    border-color:#004120;
+}
+.facility-info-container
+{
+    border-color:black;
+}
+#csut-notes
+{
+    bottom: 1em;
+    position: absolute;
+    font-style:oblique;
+}
+
+a.csut-link
+{
+    color:#004120 !important;
+    font-weight:900;
+}
+a.csut-link:hover
+{
+    color:black !important;
+    cursor:pointer;
+    text-decoration: none;
+}
+.csut-back
+{
+    opacity:0.5;
+    padding:0.2em;
+}
+.csut-back:hover
+{
+    cursor:pointer;
+}
+.csut-title
+{
+    font-size:1.5em !important;
+    color:black !important;
+}
+.csut-title:hover
+{
+    cursor:default;
+    color:black !important;
+}
+.csut-title.csut-invert
+{
+    border-bottom: 1px dotted white;
+    color:white;
+}
+.csut-divider
+{
+    border-bottom: 1px dotted black;
+}
+.csut-go-to-container
+{
+    display: block;
+    height: 5em;
+    width: 10em;
+}
+.csut-link-box
+{
+    display: inline-block;
+    border: 1px solid grey;
+    font-weight: 900;
+}
+.csut-go-to:hover
+{
+    background-color: #ccc;
+    cursor: pointer;
+}
+.csut-icon-external-link
+{
+    display: inline-block;
+    width: 24px;
+    height: 18px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url("../img/external-link.png");
+}
+.csut-icon-pdf-file
+{
+    display: inline-block;
+    width: 19px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url("../img/pdf-file.png");
+}
+.csut-map-icon
+{
+    display: inline-block;
+    width: 58px;
+    height: 34px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url("../img/csut-map.png");
+}
+.csut-geo-icon
+{
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+#csut-icon-alaska.csut-geo-icon
+{
+    background-image: url("../img/alaska.png");
+}
+#csut-icon-hawaii.csut-geo-icon
+{
+    background-image: url("../img/hawaii.png");
+}
+#csut-icon-puerto-rico.csut-geo-icon
+{
+    background-image: url("../img/puerto-rico.png");
+}
+#csut-icon-lower-48.csut-geo-icon
+{
+    background-image: url("../img/lower-48.png");
+}
+#csut-icon-guam.csut-geo-icon
+{
+    background-image: url("../img/guam.png");
+}
+#csut-icon-american-somoa.csut-geo-icon
+{
+    background-image: url("../img/american-somoa.png");
+}
+#csut-icon-us-virgin-islands.csut-geo-icon
+{
+    background-image: url("../img/us-virgin-islands.png");
+}
+#csut-icon-nm-islands.csut-geo-icon
+{
+    background-image: url("../img/nm-islands.png");
+}
+.btn.csut-btn
+{
+    background-color: white;
+    color: #004120;
+    border: 1px solid #004120;
+    margin: 0.5em;
+}
+.btn.csut-btn:hover
+{
+    background-color: #004120;
+    color: white;
+    cursor:pointer;
+}
+.csut-subtle
+{
+    font-size: 0.8em;
+    font-weight: 800;
+    font-style: oblique;
+}
+.csut-table-header
+{
+    font-size: 0.8em;
+    font-weight: 900;
+}
+.csut-info-table-header
+{
+    font-size: 1.2em;
+    font-weight: 900;
+}
+.csut-info-table-header.csut-invert
+{
+    background-color:#333;
+    color:white;
+}
+.csut-info-table-row
+{
+    font-size: 1em;
+    font-weight: 700;
+}
+.basemap-toggle-item
+{
+    border: 1px solid black;
+    opacity:0.9;
+}
+.basemap-toggle-item.active
+{
+    border: 2px solid black;
+    color:black;
+    font-weight: 900;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+}
+.basemap-toggle-item.inactive
+{
+    border: 2px solid #ccc;
+}
+.basemap-toggle-item:hover
+{
+    background-color:#ccc;
+    color:white;
+    cursor:pointer;
+    opacity:1;
+}
+.typeahead {
+    background-color: #FFFFFF;
+}
+.tt-dropdown-menu {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 4px;
+    padding: 4px 0;
+    width: 100%;
+    max-height: 300px;
+    overflow: auto;
+}
+.tt-suggestion {
+    font-size: 1.3em;
+    line-height: 1.5em;
+    line-height: 1.5em;
+    padding: 3px 10px;
+}
+.tt-suggestion.tt-cursor {
+    background-color: #004120;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+.tt-suggestion p {
+    margin: 0;
+}
+.tt-suggestion + .tt-suggestion {
+    border-top: 1px solid #ccc;
+}
+.typeahead-header {
+    font-weight:900;
+    margin: 0 5px 5px 5px;
+    padding:0.5em;
+    border-bottom: 2px solid #333;
+}
+.no-suggestions {
+    font-weight:900;
+    font-style:italic;
+    padding:0.5em;
+}
+/*to deal with collision between bootstrap and leaflet coordinates plugin, label class*/
+.leaflet-control-coordinates .uiElement.label
+{
+    padding: .4em;
+    font-size: 100%;
+    font-weight: 300;
+    color: black;
+}

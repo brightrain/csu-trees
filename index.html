@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>csu trees</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--IE support (8)-->
+        <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+        <!--          -->
+        <link rel="icon" type="image/png" href="./img/csut-icon-tree-conifer-small.png" >
+        <link rel="stylesheet" type="text/css" href="css/csut.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,600">
+        <link rel="stylesheet" href="css/leaflet.css" />
+        <link rel="stylesheet" href="css/leaflet-coordinates.css" />
+    </head>
+    <body>  
+        <div id="preloader"></div>
+        <div id="csu-logo-container" class="csut-floater">
+            <img id="csu-logo" src="./img/go-rams.png" />
+            <span class="csut-title">Colorado State University Trees</span>
+        </div>
+        <div id="centroid-logo-container" class="csut-floater">
+            <img id="centroid-logo" src="./img/centroid-logo.png" />
+        </div>
+        <div id="csut-basemap-toggle-container" class="csut-floater">
+            <div id="toggle-topo-basemap" class="basemap-toggle-item active csut-container">
+                <span class="csut-icon csut-icon-map-topo"></span>
+                <div><strong>Topo</strong></div>
+            </div>
+            <div id="toggle-aerial-basemap" class="basemap-toggle-item inactive csut-container">
+                <span class="csut-icon csut-icon-map-satellite"></span>
+                <div><strong>Satellite</strong></div>
+            </div>
+        </div>
+        <div id="csut-information-container" class="csut-floater">
+            <a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="info-btn" title="Important information about csut 2012 Mapper">Information</a>
+        </div>
+        <div id="csut-search-container" class="csut-floater">
+            <form id="search-form" class="navbar-form navbar-right" role="search">
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="search-box"></label>
+                    <input id="search-box" type="text" class="form-control input-lg" placeholder="Search">
+                    <span id="search-icon" class="csut-icon csut-icon-map-search form-control-feedback"></span>
+                    <span id="search-loading-icon" class="form-control-feedback"></span>
+                </div>
+            </form>
+        </div>
+        <div id="csut-main">
+            <a href="#" id="toggle-side-panel" title="close\open side bar">
+                <span id="csut-toggle-side-panel-icon" class='csut-icon csut-icon-expand'></span>
+            </a>
+            <div id="sidebar-content">
+
+            </div>
+        </div>
+        <div id="map">
+        </div>
+        <div class="modal fade" id="info-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Information About CSU Tree Inventory</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="csut-information">This is the story about how we collected this data and what this application does with it.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="js/lib/underscorejs/underscore-min.js"></script>
+        <script src="js/lib/bootstrap/bootstrap.min.js"></script>
+        <script src="js/lib/leaflet/leaflet.js"></script>
+        <script src="js/lib/esri-leaflet/esri-leaflet.js"></script>
+        <script src="js/lib/coordinates/leaflet-coordinates.min.js"></script>
+        <script src="js/lib/typeahead/typeahead.bundle.min.js"></script>
+        <script src="js/csut-config.js"></script>
+        <script src="js/csut-core.js"></script>
+        <script>
+            $(document).ready(function() {
+                csut.init();
+            });
+        </script>
+    </body>
+</html>
