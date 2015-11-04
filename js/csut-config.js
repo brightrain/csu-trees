@@ -16,5 +16,6 @@ var csut = {
             [40.5633, -105.1390],
             [40.5609, -105.1433]
         ],
+        informationContent: "This is the story about how we collected this data and what this application does with it."
     }
 };

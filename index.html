@@ -15,37 +15,40 @@
         <link rel="stylesheet" href="css/leaflet-coordinates.css" />
     </head>
     <body>  
-        <div id="preloader"></div>
-        <div id="csu-logo-container" class="csut-floater">
-            <img id="csu-logo" src="./img/go-rams.png" />
-            <span class="csut-title">Colorado State University Trees</span>
-        </div>
         <div id="centroid-logo-container" class="csut-floater">
             <img id="centroid-logo" src="./img/centroid-logo.png" />
         </div>
-        <div id="csut-basemap-toggle-container" class="csut-floater">
-            <div id="toggle-topo-basemap" class="basemap-toggle-item active csut-container">
-                <span class="csut-icon csut-icon-map-topo"></span>
-                <div><strong>Topo</strong></div>
+        <div id="preloader"></div>
+        <div id="meta-container" class="csut-floater">
+            <div id="csu-logo-container" class="csut-container">
+                <img id="csu-logo" src="./img/go-rams.png" />
+                <span class="csut-title">Colorado State University Trees</span>
             </div>
-            <div id="toggle-aerial-basemap" class="basemap-toggle-item inactive csut-container">
-                <span class="csut-icon csut-icon-map-satellite"></span>
-                <div><strong>Satellite</strong></div>
-            </div>
-        </div>
-        <div id="csut-information-container" class="csut-floater">
-            <a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="info-btn" title="Important information about csut 2012 Mapper">Information</a>
-        </div>
-        <div id="csut-search-container" class="csut-floater">
-            <form id="search-form" class="navbar-form navbar-right" role="search">
-                <div class="form-group has-feedback">
-                    <label class="control-label" for="search-box"></label>
-                    <input id="search-box" type="text" class="form-control input-lg" placeholder="Search">
-                    <span id="search-icon" class="csut-icon csut-icon-map-search form-control-feedback"></span>
-                    <span id="search-loading-icon" class="form-control-feedback"></span>
+            <div id="csut-basemap-toggle-container">
+                <div id="toggle-topo-basemap" class="basemap-toggle-item active csut-container">
+                    <span class="csut-icon csut-icon-map-topo"></span>
+                    <div><strong>Topo</strong></div>
                 </div>
-            </form>
+                <div id="toggle-aerial-basemap" class="basemap-toggle-item inactive csut-container">
+                    <span class="csut-icon csut-icon-map-satellite"></span>
+                    <div><strong>Satellite</strong></div>
+                </div>
+            </div>
+            <div id="info-btn" class="basemap-toggle-item csut-container" title="Get more information about CSU Trees">
+                <span>Information</span>
+            </div>
+            <div id="csut-search-container">
+                <form id="search-form" class="navbar-form navbar-right" role="search">
+                    <div class="form-group has-feedback">
+                        <label class="control-label" for="search-box"></label>
+                        <input id="search-box" type="text" class="form-control input-lg" placeholder="Search">
+                        <span id="search-icon" class="csut-icon csut-icon-map-search form-control-feedback"></span>
+                        <span id="search-loading-icon" class="form-control-feedback"></span>
+                    </div>
+                </form>
+            </div>
         </div>
+        
         <div id="csut-main">
             <a href="#" id="toggle-side-panel" title="close\open side bar">
                 <span id="csut-toggle-side-panel-icon" class='csut-icon csut-icon-expand'></span>
@@ -64,7 +67,8 @@
                         <h4 class="modal-title">Information About CSU Tree Inventory</h4>
                     </div>
                     <div class="modal-body">
-                        <div id="csut-information">This is the story about how we collected this data and what this application does with it.</div>
+                        <div id="csut-information">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

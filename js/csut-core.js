@@ -89,13 +89,7 @@ $.extend(true, csut, {
                 }
                 csut.map.invalidateSize();
             });
-            $("#csut-instructions").html(csut.config.instructionsHtml);
             $("#csut-information").html(csut.config.informationContent);
-            $("#help-btn").click(function() {
-                $("#help-modal").modal("show");
-                $(".navbar-collapse.in").collapse("hide");
-                return false;
-            });
             $("#info-btn").click(function() {
                 $("#info-modal").modal("show");
                 $(".navbar-collapse.in").collapse("hide");
@@ -160,9 +154,7 @@ $.extend(true, csut, {
                 .bindPopup(function(feature){
                 return csut.buildTreeContent(feature);
             }).addTo(this.map);
-            
-
-            
+            /*
             this.map.on("click", function(e) {
                 try {
                     $("#info-pane").addClass("csut-loading")
@@ -174,7 +166,7 @@ $.extend(true, csut, {
                         $("#csut-toggle-side-panel-icon").removeClass("csut-icon-expand").addClass("csut-icon-collapse");
                         csut.map.invalidateSize();
                     }
-                    csut.showEntities(e.latlng);
+
                 } catch(err) {
                     $("#info-pane").removeClass("csut-loading");
                     //console.log(err.message);
@@ -183,6 +175,7 @@ $.extend(true, csut, {
                     $('#csut-tabs a[href="#info-pane"]').tab('show');
                 }
             });
+            */
             csut.searchMarker = L.circleMarker(new L.LatLng(0, 0), { color: 'red' });
             csut.mapMarker = L.circleMarker(new L.LatLng(0, 0), { color: 'yellow', opacity: 0.9, fillOpacity:0.7 });
             $("#search-btn").click(function () {

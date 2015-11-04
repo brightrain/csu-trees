@@ -23,29 +23,6 @@ body {
 {
     cursor:pointer;
 }
-#csut-navbar.navbar
-{
-    margin:0;
-    border-bottom:1px solid #ccc;
-    background-color:#0191C8;
-}
-#csut-navbar.navbar *.tooltip *
-{
-    color: white;
-}
-#csut-navbar.navbar li *
-{
-    color:black;
-    font-weight:600;
-}
-#csut-navbar.navbar li *:hover
-{
-    color:white;
-}
-#csut-navbar.navbar ul.dropdown-menu li :hover
-{
-    color:black;
-}
 #csut-main
 {
     position:absolute;
@@ -73,11 +50,14 @@ body {
     margin: 0.2em;
     overflow: auto;
 }
+#meta-container
+{
+    top:30px;
+    left:10px;
+}
 #csu-logo-container
 {
-    left:10px;
-    top:25px;
-    opacity:0.6;
+    opacity:0.8;
     border-radius: 8px;
     border: 1px solid #ccc;
 }
@@ -107,25 +87,6 @@ body {
     background-color:white;
     opacity:0.7;
     border-radius: 8px;
-}
-ul#csut-tabs.nav.nav-tabs
-{
-    border-bottom: 2px solid #ccc;
-}
-ul#csut-tabs li a
-{
-    color: black;
-    font-weight:700;
-    font-size:1.2em;
-}
-ul#csut-tabs li a:hover
-{
-    color: #004120;
-}
-ul#csut-tabs li.active a
-{
-    border-bottom: 4px solid #004120 !important;
-    color: #004120;
 }
 #search-box
 {
