@@ -64,17 +64,17 @@ $.extend(true, csut, {
             content += "<img src='http://tree-pictures.com/images/treephotos-crabapple/crabapple.gif' class='pull-right'>"
         }
         else if(properties.New_Common == "Ohio buckeye") {
-            content += "<img src='/img/csut-icon-tree-deciduous.png'>";
+            content += "<img src='img/csut-icon-tree-deciduous.png'>";
             content += "<img src='https://www.heritage-eyecare.com/wp-content/uploads/2014/01/BlockO.gif' class='pull-right'>"
         }
         else if(properties.DecidConif === "D") {
-            content += "<img src='/img/csut-icon-tree-deciduous.png'>";
+            content += "<img src='img/csut-icon-tree-deciduous.png'>";
         }
         else if(properties.DecidConif === "C") {
-            content += "<img src='/img/csut-icon-tree-conifer.png'>";
+            content += "<img src='img/csut-icon-tree-conifer.png'>";
         }
         else {
-            content += "<img src='/img/csut-icon-tree-conifer.png'>";
+            content += "<img src='img/csut-icon-tree-conifer.png'>";
         }
         content += "<h2>" + properties.New_Common + "</h2>" +
             "<h4>Tree ID: " + properties.ID + "</h4>" +
@@ -348,7 +348,7 @@ $.extend(true, csut, {
                 displayKey: "name",
                 source: treeTypesBH.ttAdapter(),
                 templates: {
-                    header: "<h4 class='typeahead-header typeahead-trees-header'><img src='img/csut-icon-tree-conifer-small.png'>&nbsp;Tree Types</h4><i>select to see that species in the current map</i>",
+                    header: "<h4 class='typeahead-header typeahead-trees-header'><img src='img/csut-icon-tree-conifer-small.png'>&nbsp;Tree Types</h4>",
                     empty: [
                         '<div class="no-suggestions">',
                         'No tree type matches',
@@ -416,7 +416,7 @@ $.extend(true, csut, {
                         .where("New_Common='" + datum.name + "'")
                         .within(csut.map.getBounds())
                         .run(function(error, featureCollection, response){
-                        console.log('Found ' + featureCollection.features.length + ' features');
+                        if(featureCollection.features.length>0) {
                         featureCollection.features.forEach(function(feature, index) {
                             try {
                                 var ll = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
@@ -433,6 +433,10 @@ $.extend(true, csut, {
                                 var err = e;   
                             }
                         });
+                        }
+                        else {
+                         csut.notify($("#search-box"), "There are no " + datum.name +  " trees in the current map extent");  
+                        }
                     });
                 }
                 else if(datum.source == "trees") {
@@ -486,7 +490,7 @@ $.extend(true, csut, {
 
             /*</layer toggles>*/
             this.icons.coniferousTreeIcon = L.icon({
-                iconUrl: '/img/csut-icon-tree-conifer-small.png',
+                iconUrl: 'img/csut-icon-tree-conifer-small.png',
                 //iconRetinaUrl: 'img/csut-icon-tree-conifer-small.png',
                 //use native icon size
                 //iconSize: [50, 50],
@@ -495,7 +499,7 @@ $.extend(true, csut, {
             });
 
             this.icons.deciduousTreeIcon = L.icon({
-                iconUrl: '/img/csut-icon-tree-deciduous-small.png',
+                iconUrl: 'img/csut-icon-tree-deciduous-small.png',
                 //iconRetinaUrl: '/img/csut-icon-tree-deciduous-small.png',
                 //use native icon size
                 //iconSize: [50, 50],
