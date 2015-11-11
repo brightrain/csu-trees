@@ -10,6 +10,7 @@ $.extend(true, csut, {
     map: {},
     mapMarker: {},
     searchMarker: {},
+    selectedTrees: null,
     current: {
         selectedGeoJson: null
     },
@@ -21,17 +22,68 @@ $.extend(true, csut, {
         return str;
     },
     buildTreeContent: function(feature) {
-            var properties = feature.properties,
+        /*
+        blue spruce
+        lodgepole pine
+        ponderosa pine
+        Austrian pine
+        pinyon pine
+        honeylocust
+        hackberry
+        green ash
+        crabapple
+        Ohio buckeye
+        */
+        var properties = feature.properties,
             content = "";
-        if(properties.DecidConif === "D") {
-            content += "<img scr='~./img/csut-icon-tree-deciduous.png'>";
+        if(properties.New_Common == "blue spruce") {
+            content += "<img src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Picea_pungens_tree.jpg/160px-Picea_pungens_tree.jpg' class='pull-right'>"
+        }
+        else if(properties.New_Common == "lodgepole pine") {
+            content += "<img src='http://ps79q.wikispaces.com/file/view/Lodge%20Pole%20Pine%202.png/546484958/181x335/Lodge%20Pole%20Pine%202.png' class='pull-right'>"
+        }
+        else if(properties.New_Common == "ponderosa pine") {
+            content += "<img src='https://s-media-cache-ak0.pinimg.com/originals/27/39/63/273963afdfadbe8648b80e2a26606231.gif' class='pull-right'>"
+        }
+        else if(properties.New_Common == "Austrian pine") {
+            content += "<img src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Pin_laricio_Corse.jpg/180px-Pin_laricio_Corse.jpg' class='pull-right'>"
+        }
+        else if(properties.New_Common == "pinyon pine") {
+            content += "<img src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Pinyon_pine_Pinus_monophylla.jpg/320px-Pinyon_pine_Pinus_monophylla.jpg' class='pull-right'>"
+        }
+        else if(properties.New_Common == "honeylocust") {
+            content += "<img src='http://tree-pictures.com/beautiful-honeylocust.jpg' class='pull-right'>"
+        }
+        else if(properties.New_Common == "hackberry") {
+            content += "<img src='http://tree-pictures.com/hberrytree.jpg' class='pull-right'>"
+        }
+        else if(properties.New_Common == "green ash") {
+            content += "<img src='http://tree-pictures.com/ash-green.jpg' class='pull-right'>"
+        }
+        else if(properties.New_Common == "crabapple") {
+            content += "<img src='http://tree-pictures.com/images/treephotos-crabapple/crabapple.gif' class='pull-right'>"
+        }
+        else if(properties.New_Common == "Ohio buckeye") {
+            content += "<img src='/img/csut-icon-tree-deciduous.png'>";
+            content += "<img src='https://www.heritage-eyecare.com/wp-content/uploads/2014/01/BlockO.gif' class='pull-right'>"
+        }
+        else if(properties.DecidConif === "D") {
+            content += "<img src='/img/csut-icon-tree-deciduous.png'>";
+        }
+        else if(properties.DecidConif === "C") {
+            content += "<img src='/img/csut-icon-tree-conifer.png'>";
         }
         else {
-            content += "<img scr='~./img/csut-icon-tree-conifer.png'>";
-        } 
+            content += "<img src='/img/csut-icon-tree-conifer.png'>";
+        }
         content += "<h2>" + properties.New_Common + "</h2>" +
-        "<h5>" + properties.Genus_spec + "</h5>" +
-        "<h5>" + properties.Family + "</h5>";
+            "<h4>Tree ID: " + properties.ID + "</h4>" +
+            "<h5>Genus: " + properties.Genus_spec + "</h5>" +
+            "<h5>Family: " + properties.Family + "</h5>" +
+            "<h5>Cultivar: " + properties.Cultivar + "</h5>" +
+            "<h5>DBH: " + properties.DBH + "</h5>" +
+            "<h5>Campus: " + properties.Campus + "</h5>" +
+            "<h5><b><i>" + properties.Notes + "</i></b></h5>";
         return content;
     },
     findAndZoom: function(findThis) {
@@ -95,11 +147,11 @@ $.extend(true, csut, {
                 $(".navbar-collapse.in").collapse("hide");
                 return false;
             });
-           
+
             this.map = L.map('map',
                              {
                 zoomControl: false
-            }).fitBounds(csut.config.csuCampusBounds);
+            }).fitBounds(csut.config.csuLibraryBounds);
             new L.Control.Zoom({ position: 'bottomleft' }).addTo(csut.map);
             //https://github.com/MrMufflon/Leaflet.Coordinates
             L.control.coordinates({
@@ -133,13 +185,13 @@ $.extend(true, csut, {
                 url: csut.config.mapServiceUrl,
                 opacity : 1
             }).addTo(this.map);
-            
+
             /* Add trees layer as feature layer so we can change icons and interact with them*/
             csut.treesLayer = L.esri.featureLayer({
                 url: csut.config.mapServiceUrl + csut.config.layerIndexes.treesLayerIndex,
                 pointToLayer: function (geojson, latlng) {
                     var icon = null;
-                    
+
                     if(geojson.properties.DecidConif === "D") {
                         icon = csut.icons.deciduousTreeIcon; 
                     }
@@ -178,6 +230,7 @@ $.extend(true, csut, {
             */
             csut.searchMarker = L.circleMarker(new L.LatLng(0, 0), { color: 'red' });
             csut.mapMarker = L.circleMarker(new L.LatLng(0, 0), { color: 'yellow', opacity: 0.9, fillOpacity:0.7 });
+            csut.selectedTrees = L.layerGroup().addTo(csut.map);    
             $("#search-btn").click(function () {
                 if ($("#search-box").val() !== "") {
                     csut.findAndZoom($("#search-box").val());
@@ -191,7 +244,7 @@ $.extend(true, csut, {
                 $(this).select();
             });
             /*< using typeahead js >*/
-            
+
             var esriBH = new Bloodhound({
                 name: "Esri",
                 datumTokenizer: function (d) {
@@ -224,12 +277,97 @@ $.extend(true, csut, {
             });
             esriBH.initialize();
 
+            var treesBH = new Bloodhound({
+                name: "trees",
+                datumTokenizer: function (d) {
+                    return Bloodhound.tokenizers.whitespace(d.name);
+                },
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: csut.config.mapServiceUrl + "find?" +
+                    "searchText=%QUERY&contains=true&searchFields=ID" + 
+                    "&layers=0&returnGeometry=false&f=json",
+                    filter: function (data) {
+                        return $.map(data.results, function (result) {
+                            return {
+                                name: result.attributes.ID,
+                                objectId: result.attributes.FID,
+                                source: "trees"
+                            };
+                        });
+                    },
+                    //dataType needs to be jsonp to support < IE 10
+                    ajax: {
+                        dataType: "jsonp"
+                    }
+                },
+                limit: 12
+            });
+            treesBH.initialize();
+
+            var treeTypesBH = new Bloodhound({
+                name: "treeTypes",
+                datumTokenizer: function (d) {
+                    return Bloodhound.tokenizers.whitespace(d.name);
+                },
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: csut.config.mapServiceUrl + "find?" +
+                    "searchText=%QUERY&contains=true&searchFields=New_Common" + 
+                    "&layers=0&returnGeometry=false&f=json",
+                    filter: function (data) {
+                        return $.map(data.results, function (result) {
+                            return {
+                                name: result.attributes.New_Common,
+                                value: result.attributes.New_Common,
+                                objectId: result.attributes.FID,
+                                source: "treeTypes"
+                            };
+                        });
+                    },
+                    //dataType needs to be jsonp to support < IE 10
+                    ajax: {
+                        dataType: "jsonp"
+                    }
+                },
+                // ! It's dupDetector NOT dupChecker, confusing...
+                // http://stackoverflow.com/questions/23534007/typeahead-js-deduplicate-between-prefetch-and-remote-datasources
+                dupDetector: function(a, b) {
+                    return a.value === b.value;
+                },
+                limit: 12
+            });
+            treeTypesBH.initialize();
+
             $("#search-box").typeahead({
                 minLength: 3,
                 highlight: true,
                 hint: false
-            },
-            {
+            }, {
+                name: "treeTypes",
+                displayKey: "name",
+                source: treeTypesBH.ttAdapter(),
+                templates: {
+                    header: "<h4 class='typeahead-header typeahead-trees-header'><img src='img/csut-icon-tree-conifer-small.png'>&nbsp;Tree Types</h4><i>select to see that species in the current map</i>",
+                    empty: [
+                        '<div class="no-suggestions">',
+                        'No tree type matches',
+                        '</div>'
+                    ].join('\n')
+                }
+            },{
+                name: "trees",
+                displayKey: "name",
+                source: treesBH.ttAdapter(),
+                templates: {
+                    header: "<h4 class='typeahead-header typeahead-trees-header'><img src='img/csut-icon-tree-conifer-small.png'>&nbsp;Tree IDs</h4>",
+                    empty: [
+                        '<div class="no-suggestions">',
+                        'No matching trees',
+                        '</div>'
+                    ].join('\n')
+                }
+            },{
                 name: "Esri",
                 displayKey: "name",
                 source: esriBH.ttAdapter(),
@@ -271,6 +409,65 @@ $.extend(true, csut, {
                         }
                     });
                 }
+                else if(datum.source == "treeTypes") {
+                    csut.selectedTrees.clearLayers();
+                    // http://esri.github.io/esri-leaflet/api-reference/tasks/query.html
+                    csut.treesLayer.query()
+                        .where("New_Common='" + datum.name + "'")
+                        .within(csut.map.getBounds())
+                        .run(function(error, featureCollection, response){
+                        console.log('Found ' + featureCollection.features.length + ' features');
+                        featureCollection.features.forEach(function(feature, index) {
+                            try {
+                                var ll = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
+                                L.circleMarker(ll, 
+                                               { fillColor: "white",
+                                                fillOpacity: 0.2,
+                                                radius: 20,
+                                                weight: 5,
+                                                color: "#003300"
+                                               })
+                                    .addTo(csut.selectedTrees);
+                            }
+                            catch(e) {
+                                var err = e;   
+                            }
+                        });
+                    });
+                }
+                else if(datum.source == "trees") {
+                    url = csut.config.mapServiceUrl + csut.config.layerIndexes.treesLayerIndex + "/query?" +
+                        "where=ID=" + datum.name +
+                        "&outFields=ID&returnGeometry=true&f=json&callback=?";
+
+                    $.getJSON(url, function(result) {
+                        if(!(result.error)) {
+                            var feature = result.features[0];
+                            var x = feature.geometry.x;
+                            var y = feature.geometry.y;
+                            //using the proj4 library to convert to web mercator
+                            var project = proj4("EPSG:3857", "EPSG:4326", { "x": x, "y": y });
+                            var ll = L.latLng(project.y, project.x);
+                            var bounds = L.latLngBounds(ll, ll);
+                            csut.map.fitBounds(bounds, {maxZoom: 20});
+                            //grab the tree and create a popup
+                            L.esri.Tasks.find({ url: csut.config.mapServiceUrl })
+                                .layers("0")
+                                .text(feature.attributes.ID)
+                                .fields("ID")
+                                .run(function(error, featureCollection, response) {
+                                var feature = featureCollection.features[0];
+                                L.popup({ offset: L.point(0, -15) })
+                                    .setLatLng(L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]))
+                                    .setContent(csut.buildTreeContent(feature))
+                                    .openOn(csut.map);
+                            });
+                        }
+                        else {
+                            console.log("error");   
+                        }
+                    });
+                }
             });
             /*</ using typeahead js />*/
 
@@ -286,7 +483,7 @@ $.extend(true, csut, {
                     }  
                 }
             });
-            
+
             /*</layer toggles>*/
             this.icons.coniferousTreeIcon = L.icon({
                 iconUrl: '/img/csut-icon-tree-conifer-small.png',

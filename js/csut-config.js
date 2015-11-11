@@ -1,6 +1,5 @@
 var csut = {
     config: {
-        /*STAGING*/
         mapServiceUrl: "http://centroid1.acns.colostate.edu:6080/arcgis/rest/services/Trees/CSU_Trees_2013_webmerc/MapServer/",
         arcgisGeocodingBaseUrl: "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/",
         arcgisGeometryServiceUrl: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer/",
@@ -12,7 +11,11 @@ var csut = {
             color: "#F5D04C",
             weight: 15
         },
-        csuCampusBounds: [
+        csuLibraryBounds: [
+            [40.5753, -105.0797],
+            [40.5712, -105.0883]
+        ],
+        csuHughesBounds: [
             [40.5633, -105.1390],
             [40.5609, -105.1433]
         ],
