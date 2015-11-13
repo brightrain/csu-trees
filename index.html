@@ -24,7 +24,16 @@
                 <img id="csu-logo" src="./img/go-rams.png" />
                 <span class="csut-title">Colorado State University Trees</span>
             </div>
-            <div id="csut-basemap-toggle-container">
+            <form id="search-form" class="csut-floater navbar-form navbar-right" role="search">
+                <div class="form-group has-feedback">
+                    <label class="control-label" for="search-box"></label>
+                    <input id="search-box" type="text" class="form-control input-lg" placeholder="Search tree IDs, types or addresses">
+                    <span id="search-icon" class="csut-icon csut-icon-map-search form-control-feedback"></span>
+                    <span id="search-loading-icon" class="form-control-feedback"></span>
+                </div>
+            </form>
+        </div>
+        <div id="csut-basemap-toggle-container" class="csut-floater">
                 <div id="toggle-topo-basemap" class="basemap-toggle-item active csut-container">
                     <span class="csut-icon csut-icon-map-topo"></span>
                     <div><strong>Topo</strong></div>
@@ -34,25 +43,19 @@
                     <div><strong>Satellite</strong></div>
                 </div>
             </div>
-            <div id="info-btn" class="basemap-toggle-item csut-container" title="Get more information about CSU Trees">
-                <span>Information</span>
-            </div>
-            <div id="csut-search-container">
-                <form id="search-form" class="navbar-form navbar-right" role="search">
-                    <div class="form-group has-feedback">
-                        <label class="control-label" for="search-box"></label>
-                        <input id="search-box" type="text" class="form-control input-lg" placeholder="Search">
-                        <span id="search-icon" class="csut-icon csut-icon-map-search form-control-feedback"></span>
-                        <span id="search-loading-icon" class="form-control-feedback"></span>
-                    </div>
-                </form>
-            </div>
+        <div id="info-btn" class="btn csut-btn csut-floater" title="Get more information about CSU Trees">
+            <span>More Information...</span>
         </div>
-        
-        <div id="csut-main">
+        <div id="csut-toggle-sidebar-container" class="csut-floater">
             <a href="#" id="toggle-side-panel" title="close\open side bar">
                 <span id="csut-toggle-side-panel-icon" class='csut-icon csut-icon-expand'></span>
             </a>
+        </div>
+        <div id="csut-main">
+            <div id="csut-title-container">
+                <div class="csut-title">Tree Types in current map extent</div>
+                <span class="csut-subtle">Click a tree type to see them on the map</span>
+            </div>
             <div id="sidebar-content">
 
             </div>
@@ -82,7 +85,7 @@
         <script src="js/lib/leaflet/leaflet.js"></script>
         <script src="js/lib/esri-leaflet/esri-leaflet.js"></script>
         <script src="js/lib/coordinates/leaflet-coordinates.min.js"></script>
-        <script src="js/lib/proj4/proj4.js"></script>
+        <!--<script src="js/lib/proj4/proj4.js"></script>-->
         <script src="js/lib/typeahead/typeahead.bundle.min.js"></script>
         <script src="js/csut-config.js"></script>
         <script src="js/csut-core.js"></script>

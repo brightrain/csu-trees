@@ -126,8 +126,8 @@ $.extend(true, csut, {
             });
             $(".csut-tip").tooltip();
             // hide sidebar by default
-            $("#sidebar-content").hide();
-            $("#map").addClass("expanded-map");
+            //$("#sidebar-content").hide();
+            //$("#map").addClass("expanded-map");
             $("#toggle-side-panel").click(function() {
                 if($("#sidebar-content").is(":visible")) {
                     $("#sidebar-content").hide();
@@ -149,13 +149,13 @@ $.extend(true, csut, {
             });
 
             this.map = L.map('map',
-                             {
+            {
                 zoomControl: false
             }).fitBounds(csut.config.csuLibraryBounds);
             new L.Control.Zoom({ position: 'bottomleft' }).addTo(csut.map);
             //https://github.com/MrMufflon/Leaflet.Coordinates
             L.control.coordinates({
-                position:"topleft",
+                position:"bottomright",
                 decimals:4,
                 decimalSeperator:".",
                 labelTemplateLat:"Y: {y}",
@@ -165,16 +165,7 @@ $.extend(true, csut, {
                 useLatLngOrder: false
             }).addTo(this.map);
             csut.basemapLayer = L.esri.basemapLayer("Topographic").addTo(this.map);
-            $("#toggle-topo-basemap").click(function () {
-                $(this).removeClass("inactive").addClass("active");
-                $("#toggle-aerial-basemap").removeClass("active").addClass("inactive");
-                csut.setBasemap("Topographic");
-            });
-            $("#toggle-aerial-basemap").click(function () {
-                $(this).removeClass("inactive").addClass("active");
-                $("#toggle-topo-basemap").removeClass("active").addClass("inactive");
-                csut.setBasemap("Imagery");
-            });
+
             csut.current.selectedGeoJson = new L.GeoJSON(null, {
                 style: function () {
                     return csut.config.selectedFeatureStyle;
@@ -206,6 +197,24 @@ $.extend(true, csut, {
                 .bindPopup(function(feature){
                 return csut.buildTreeContent(feature);
             }).addTo(this.map);
+            
+            // get tree types in map extent
+            csut.getTreeTypesInCurrentExtent();
+            
+            $(document).on("click", ".get-tree-type", function() {
+                csut.selectTreeTypeInCurrentMapExtent($(this).attr("data-tree-type"));
+            });
+            
+            $("#toggle-topo-basemap").click(function () {
+                $(this).removeClass("inactive").addClass("active");
+                $("#toggle-aerial-basemap").removeClass("active").addClass("inactive");
+                csut.setBasemap("Topographic");
+            });
+            $("#toggle-aerial-basemap").click(function () {
+                $(this).removeClass("inactive").addClass("active");
+                $("#toggle-topo-basemap").removeClass("active").addClass("inactive");
+                csut.setBasemap("Imagery");
+            });
             /*
             this.map.on("click", function(e) {
                 try {
@@ -238,7 +247,11 @@ $.extend(true, csut, {
                 else {
                     csut.notify($("#search-box"), "No search term entered"); 
                 }
-            }); 
+            });
+            csut.map.on("moveend", function() {
+                //csut.selectedTrees.clearLayers();
+                csut.getTreeTypesInCurrentExtent();
+            });
             /* Highlight search box text on click */
             $("#search-box").click(function () {
                 $(this).select();
@@ -360,7 +373,7 @@ $.extend(true, csut, {
                 displayKey: "name",
                 source: treesBH.ttAdapter(),
                 templates: {
-                    header: "<h4 class='typeahead-header typeahead-trees-header'><img src='img/csut-icon-tree-conifer-small.png'>&nbsp;Tree IDs</h4>",
+                    header: "<h4 class='typeahead-header typeahead-trees-header'><img src='img/csut-icon-tree-deciduous-small.png'>&nbsp;Tree IDs</h4>",
                     empty: [
                         '<div class="no-suggestions">',
                         'No matching trees',
@@ -410,48 +423,19 @@ $.extend(true, csut, {
                     });
                 }
                 else if(datum.source == "treeTypes") {
-                    csut.selectedTrees.clearLayers();
-                    // http://esri.github.io/esri-leaflet/api-reference/tasks/query.html
-                    csut.treesLayer.query()
-                        .where("New_Common='" + datum.name + "'")
-                        .within(csut.map.getBounds())
-                        .run(function(error, featureCollection, response){
-                        if(featureCollection.features.length>0) {
-                        featureCollection.features.forEach(function(feature, index) {
-                            try {
-                                var ll = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
-                                L.circleMarker(ll, 
-                                               { fillColor: "white",
-                                                fillOpacity: 0.2,
-                                                radius: 20,
-                                                weight: 5,
-                                                color: "#003300"
-                                               })
-                                    .addTo(csut.selectedTrees);
-                            }
-                            catch(e) {
-                                var err = e;   
-                            }
-                        });
-                        }
-                        else {
-                         csut.notify($("#search-box"), "There are no " + datum.name +  " trees in the current map extent");  
-                        }
-                    });
+                    csut.selectTreeTypeInCurrentMapExtent(datum.name);
                 }
                 else if(datum.source == "trees") {
                     url = csut.config.mapServiceUrl + csut.config.layerIndexes.treesLayerIndex + "/query?" +
                         "where=ID=" + datum.name +
-                        "&outFields=ID&returnGeometry=true&f=json&callback=?";
+                        "&outFields=ID&returnGeometry=true&outSR=4326&f=json&callback=?";
 
                     $.getJSON(url, function(result) {
                         if(!(result.error)) {
                             var feature = result.features[0];
                             var x = feature.geometry.x;
                             var y = feature.geometry.y;
-                            //using the proj4 library to convert to web mercator
-                            var project = proj4("EPSG:3857", "EPSG:4326", { "x": x, "y": y });
-                            var ll = L.latLng(project.y, project.x);
+                            var ll = L.latLng(y, x);
                             var bounds = L.latLngBounds(ll, ll);
                             csut.map.fitBounds(bounds, {maxZoom: 20});
                             //grab the tree and create a popup
@@ -490,21 +474,21 @@ $.extend(true, csut, {
 
             /*</layer toggles>*/
             this.icons.coniferousTreeIcon = L.icon({
-                iconUrl: 'img/csut-icon-tree-conifer-small.png',
+                iconUrl: 'img/csut-icon-tree-green-conifer-small.png',
                 //iconRetinaUrl: 'img/csut-icon-tree-conifer-small.png',
                 //use native icon size
                 //iconSize: [50, 50],
-                iconAnchor: [11, 20],
-                popupAnchor: [-4, -25]
+                iconAnchor: [6, 14],
+                popupAnchor: [0, -20]
             });
 
             this.icons.deciduousTreeIcon = L.icon({
-                iconUrl: 'img/csut-icon-tree-deciduous-small.png',
+                iconUrl: 'img/csut-icon-tree-green-deciduous-small.png',
                 //iconRetinaUrl: '/img/csut-icon-tree-deciduous-small.png',
                 //use native icon size
                 //iconSize: [50, 50],
-                iconAnchor: [11, 20],
-                popupAnchor: [-4, -25]
+                iconAnchor: [6, 14],
+                popupAnchor: [0, -20]
             });
 
             //Hide the div that we display while loading the page.
@@ -517,6 +501,63 @@ $.extend(true, csut, {
             //console.log(err.message);
             return false;
         }
+    },
+    selectTreeTypeInCurrentMapExtent(treeTypeName) {
+        csut.selectedTrees.clearLayers();
+                    // http://esri.github.io/esri-leaflet/api-reference/tasks/query.html
+        csut.treesLayer.query()
+            .where("New_Common='" + treeTypeName + "'")
+            .within(csut.map.getBounds())
+            .run(function(error, featureCollection, response){
+            if(featureCollection.features.length>0) {
+                featureCollection.features.forEach(function(feature, index) {
+                    try {
+                        var ll = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
+                        L.circleMarker(ll, {
+                            fillColor: "white",
+                            fillOpacity: 0.2,
+                            radius: 15,
+                            weight: 4,
+                            color: "#EF9C00"
+                        }).addTo(csut.selectedTrees);
+                    }
+                    catch(e) {
+                        var err = e;   
+                    }
+                });
+            }
+            else {
+             csut.notify($("#search-box"), "There are no " + datum.name +  " trees in the current map extent");  
+            }
+        });  
+    },
+    getTreeTypesInCurrentExtent: function() {
+        csut.treesLayer.query()
+        .within(csut.map.getBounds())
+        .run(function(error, featureCollection, response){
+        if(featureCollection.features.length>0) {
+            var types = _.uniq(featureCollection.features, function(feature, key, New_Common){
+                return feature.properties.New_Common
+            });
+            var sortedTypes = _.sortBy(types, function(type){ 
+                return type.properties.New_Common.toLowerCase();
+            });
+            var content = "";
+            sortedTypes.forEach(function(feature, index) {
+                try {
+                     content += "<button class='get-tree-type btn csut-btn' data-tree-type='" + feature.properties.New_Common + "'>" + feature.properties.New_Common + "</button>";
+                }
+                catch(e) {
+                    var err = e;   
+                }
+            });
+        $("#sidebar-content").html(content);
+        }
+        else {
+            var content = "<i class=''>No trees in current extent</i>";
+            $("#sidebar-content").html(content);   
+        }
+        });  
     },
     notify: function(target, message) {
         target.tooltip({

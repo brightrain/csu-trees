@@ -19,10 +19,12 @@ body {
     width:70%;
     max-width:100%;
 }
+/*could do this to indicate the map is clickable
 #map.leaflet-container
 {
     cursor:pointer;
 }
+*/
 #csut-main
 {
     position:absolute;
@@ -52,8 +54,33 @@ body {
 }
 #meta-container
 {
-    top:30px;
+    top:10px;
     left:10px;
+}
+#csut-basemap-toggle-container
+{
+    text-align: center;
+    left:40px;
+    bottom:80px;
+}
+#info-btn
+{
+    font-size:1.2em;
+    font-weight:bold;
+    text-align:center;
+    bottom:5px;
+    left:40px;
+}
+#csut-title-container
+{
+    opacity:0.8;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding:0.1em;
+    text-align: center;
+    border-bottom: 1px dotted white;
+    color:white !important;
+    background-color: #004120;
 }
 #csu-logo-container
 {
@@ -78,20 +105,24 @@ body {
 {
     border-radius: 8px;
 }
-#toggle-side-panel
+#csut-toggle-sidebar-container
 {
     position:absolute;
     z-index:9;
-    right:1em;
-    padding:5px;
+    right:25px;
+    top:10px;
+}
+#toggle-side-panel
+{
+    padding:8px;
     background-color:white;
     opacity:0.7;
     border-radius: 8px;
 }
 #search-box
 {
-    width: 300px;
-    font-weight: 900;
+    width: 100%;
+    font-weight: 100;
 }
 #search-box:hover
 {
@@ -255,22 +286,6 @@ body {
     font-size:1.4em;
     margin:0.2em;
 }
-#info-pane.county-info
-{
-    border-color: #064780;
-}
-#info-pane.cong-dist-info
-{
-    border-color: #F36900;
-}
-#info-pane.state-info
-{
-    border-color: #004120;
-}
-#info-pane.facility-info
-{
-    border-color: black;
-}
 .info-container
 {
     line-height: 2em;
@@ -278,28 +293,6 @@ body {
     -moz-border-radius: 4px;
     border-radius: 4px;
     border: 1px solid #ccc;
-}
-.county-info-container
-{
-    border-color:#064780;
-}
-.cong-dist-info-container
-{
-    border-color:#F36900;
-}
-.state-info-container
-{
-    border-color:#004120;
-}
-.facility-info-container
-{
-    border-color:black;
-}
-#csut-notes
-{
-    bottom: 1em;
-    position: absolute;
-    font-style:oblique;
 }
 
 a.csut-link
@@ -313,6 +306,10 @@ a.csut-link:hover
     cursor:pointer;
     text-decoration: none;
 }
+.btn.get-tree-type
+{
+    width:45%;   
+}
 .csut-back
 {
     opacity:0.5;
@@ -325,17 +322,6 @@ a.csut-link:hover
 .csut-title
 {
     font-size:1.5em !important;
-    color:black !important;
-}
-.csut-title:hover
-{
-    cursor:default;
-    color:black !important;
-}
-.csut-title.csut-invert
-{
-    border-bottom: 1px dotted white;
-    color:white;
 }
 .csut-divider
 {
@@ -393,38 +379,6 @@ a.csut-link:hover
     background-repeat: no-repeat;
     background-position: center center;
 }
-#csut-icon-alaska.csut-geo-icon
-{
-    background-image: url("../img/alaska.png");
-}
-#csut-icon-hawaii.csut-geo-icon
-{
-    background-image: url("../img/hawaii.png");
-}
-#csut-icon-puerto-rico.csut-geo-icon
-{
-    background-image: url("../img/puerto-rico.png");
-}
-#csut-icon-lower-48.csut-geo-icon
-{
-    background-image: url("../img/lower-48.png");
-}
-#csut-icon-guam.csut-geo-icon
-{
-    background-image: url("../img/guam.png");
-}
-#csut-icon-american-somoa.csut-geo-icon
-{
-    background-image: url("../img/american-somoa.png");
-}
-#csut-icon-us-virgin-islands.csut-geo-icon
-{
-    background-image: url("../img/us-virgin-islands.png");
-}
-#csut-icon-nm-islands.csut-geo-icon
-{
-    background-image: url("../img/nm-islands.png");
-}
 .btn.csut-btn
 {
     background-color: white;
@@ -468,6 +422,8 @@ a.csut-link:hover
 {
     border: 1px solid black;
     opacity:0.9;
+    padding:0.5em;
+    min-width: 100px;
 }
 .basemap-toggle-item.active
 {
