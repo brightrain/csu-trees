@@ -57,12 +57,24 @@ body {
     top:10px;
     left:10px;
 }
+#csut-geoshortcuts-container
+{
+    text-align: center;
+    right:30%;
+    top:50px;
+}
+#csut-geoshortcuts-container.expanded
+{
+    right:10px;
+}
 #csut-basemap-toggle-container
 {
     text-align: center;
     left:40px;
-    bottom:80px;
+    bottom:120px;
+    margin:0.6em;
 }
+
 #info-btn
 {
     font-size:1.2em;
@@ -70,6 +82,15 @@ body {
     text-align:center;
     bottom:5px;
     left:40px;
+}
+#csut-clear-trees
+{
+    font-size:1.2em;
+    font-weight:bold;
+    text-align:center;
+    bottom:50px;
+    left:40px;
+    margin:0.6em;
 }
 #csut-title-container
 {
@@ -128,10 +149,6 @@ body {
 {
     color:black !important;
 }
-#search-icon
-{
-    margin:8px;
-}
 .csut-container
 {
     background-color: white;
@@ -161,6 +178,12 @@ body {
     margin:8px;
     display:inline-block;
     background: #fff url("../img/loading.gif") no-repeat center center;
+}
+.csut-go-to
+{
+    margin: 0.5em;
+    opacity: 0.8;
+    border: 1px solid #004120;
 }
 .csut-icon {
     display: inline-block;
@@ -385,6 +408,7 @@ a.csut-link:hover
     color: #004120;
     border: 1px solid #004120;
     margin: 0.5em;
+    min-width: 200px;
 }
 .btn.csut-btn:hover
 {

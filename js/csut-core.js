@@ -132,11 +132,13 @@ $.extend(true, csut, {
                 if($("#sidebar-content").is(":visible")) {
                     $("#sidebar-content").hide();
                     $("#map").addClass("expanded-map");
+                    $("#csut-geoshortcuts-container").addClass("expanded");
                     $("#csut-toggle-side-panel-icon").removeClass("csut-icon-collapse").addClass("csut-icon-expand");
                 }
                 else {
                     $("#sidebar-content").show();
                     $("#map").removeClass("expanded-map");
+                    $("#csut-geoshortcuts-container").removeClass("expanded");
                     $("#csut-toggle-side-panel-icon").removeClass("csut-icon-collapse").addClass("csut-icon-collapse");
                 }
                 csut.map.invalidateSize();
@@ -198,6 +200,10 @@ $.extend(true, csut, {
                 return csut.buildTreeContent(feature);
             }).addTo(this.map);
             
+            csut.searchMarker = L.circleMarker(new L.LatLng(0, 0), { color: 'red' });
+            csut.mapMarker = L.circleMarker(new L.LatLng(0, 0), { color: 'yellow', opacity: 0.9, fillOpacity:0.7 });
+            csut.selectedTrees = L.layerGroup().addTo(csut.map);    
+            
             // get tree types in map extent
             csut.getTreeTypesInCurrentExtent();
             
@@ -215,31 +221,22 @@ $.extend(true, csut, {
                 $("#toggle-topo-basemap").removeClass("active").addClass("inactive");
                 csut.setBasemap("Imagery");
             });
-            /*
-            this.map.on("click", function(e) {
-                try {
-                    $("#info-pane").addClass("csut-loading")
-                        .html("");
-                    //expand side panel if collapsed
-                    if($("#sidebar-content").is(":visible") === false) {
-                        $("#sidebar-content").show();
-                        $("#map").removeClass("expanded-map");
-                        $("#csut-toggle-side-panel-icon").removeClass("csut-icon-expand").addClass("csut-icon-collapse");
-                        csut.map.invalidateSize();
-                    }
-
-                } catch(err) {
-                    $("#info-pane").removeClass("csut-loading");
-                    //console.log(err.message);
-                }
-                finally {
-                    $('#csut-tabs a[href="#info-pane"]').tab('show');
-                }
+            $("#go-to-library").click(function() {
+                csut.map.fitBounds(csut.config.csuLibraryBounds);
             });
-            */
-            csut.searchMarker = L.circleMarker(new L.LatLng(0, 0), { color: 'red' });
-            csut.mapMarker = L.circleMarker(new L.LatLng(0, 0), { color: 'yellow', opacity: 0.9, fillOpacity:0.7 });
-            csut.selectedTrees = L.layerGroup().addTo(csut.map);    
+            $("#go-to-oval").click(function() {
+                csut.map.fitBounds(csut.config.csuOvalBounds);
+            });$("#go-to-hughes").click(function() {
+                csut.map.fitBounds(csut.config.csuHughesBounds);
+            });
+            $("#go-to-foothills").click(function() {
+                csut.map.fitBounds(csut.config.csuFoothillsBounds);
+            });
+            
+            $("#csut-clear-trees").click(function() {
+                csut.selectedTrees.clearLayers(); 
+            });
+            
             $("#search-btn").click(function () {
                 if ($("#search-box").val() !== "") {
                     csut.findAndZoom($("#search-box").val());

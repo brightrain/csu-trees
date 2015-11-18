@@ -24,25 +24,46 @@
                 <img id="csu-logo" src="./img/go-rams.png" />
                 <span class="csut-title">Colorado State University Trees</span>
             </div>
-            <form id="search-form" class="csut-floater navbar-form navbar-right" role="search">
-                <div class="form-group has-feedback">
+            <form id="search-form" class="csut-floater" role="search">
+                <div class="form-group">
                     <label class="control-label" for="search-box"></label>
                     <input id="search-box" type="text" class="form-control input-lg" placeholder="Search tree IDs, types or addresses">
-                    <span id="search-icon" class="csut-icon csut-icon-map-search form-control-feedback"></span>
-                    <span id="search-loading-icon" class="form-control-feedback"></span>
+                    <span id="search-icon" class="csut-icon csut-icon-map-search"></span>
+                    <span id="search-loading-icon" class=""></span>
                 </div>
             </form>
         </div>
         <div id="csut-basemap-toggle-container" class="csut-floater">
-                <div id="toggle-topo-basemap" class="basemap-toggle-item active csut-container">
-                    <span class="csut-icon csut-icon-map-topo"></span>
-                    <div><strong>Topo</strong></div>
-                </div>
-                <div id="toggle-aerial-basemap" class="basemap-toggle-item inactive csut-container">
-                    <span class="csut-icon csut-icon-map-satellite"></span>
-                    <div><strong>Satellite</strong></div>
-                </div>
+            <div id="toggle-topo-basemap" class="basemap-toggle-item active csut-container">
+                <span class="csut-icon csut-icon-map-topo"></span>
+                <div><strong>Topo</strong></div>
             </div>
+            <div id="toggle-aerial-basemap" class="basemap-toggle-item inactive csut-container">
+                <span class="csut-icon csut-icon-map-satellite"></span>
+                <div><strong>Satellite</strong></div>
+            </div>
+        </div>
+        <div id="csut-geoshortcuts-container" class="csut-floater">
+            <div id="go-to-library" class="csut-go-to csut-container">
+                <img src="img/csut-icon-library.png" />
+                <div><strong>Library</strong></div>
+            </div>
+            <div id="go-to-oval" class="csut-go-to csut-container">
+                <img src="img/csut-icon-oval.png" />
+                <div><strong>Main Campus</strong></div>
+            </div>
+            <div id="go-to-hughes" class="csut-go-to csut-container">
+                <img src="img/csut-icon-stadium.png" />
+                <div><strong>Hughes Stadium</strong></div>
+            </div>
+            <div id="go-to-foothills" class="csut-go-to csut-container">
+                <img src="img/csut-icon-foothills.png" />
+                <div><strong>Foothills</strong></div>
+            </div>
+        </div>
+        <div id="csut-clear-trees" class="btn csut-btn csut-floater" title="Clear selected trees">
+            <span>Clear Selected Trees</span>
+        </div>
         <div id="info-btn" class="btn csut-btn csut-floater" title="Get more information about CSU Trees">
             <span>More Information...</span>
         </div>
@@ -67,10 +88,14 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Information About CSU Tree Inventory</h4>
+                        <h1 class="modal-title">
+                            <span><img src='img/csut-icon-tree-deciduous.png' /></span>
+                            <b>CSU Tree Inventory</b>
+                        </h1>
                     </div>
                     <div class="modal-body">
                         <div id="csut-information">
+                            
                         </div>
                     </div>
                     <div class="modal-footer">

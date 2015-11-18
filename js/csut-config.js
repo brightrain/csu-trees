@@ -15,10 +15,20 @@ var csut = {
             [40.575, -105.082],
             [40.573, -105.088]
         ],
-        csuHughesBounds: [
-            [40.5633, -105.1390],
-            [40.5609, -105.1433]
+        csuOvalBounds: [
+            [40.579, -105.08],
+            [40.571, -105.1]
         ],
-        informationContent: "This is the story about how we collected this data and what this application does with it."
+        csuHughesBounds: [
+            [40.5642, -105.1340],
+            [40.5596, -105.1433]
+        ],
+        csuFoothillsBounds: [
+            [40.5893, -105.13],
+            [40.5737, -105.1586]
+        ],
+        informationContent: "" +
+                            "<h3>This project, supported by a Warner College Mini-Grant, was developed through a partnership between CSU Facilities Management " +
+                            "and the Geospatial Centroid at CSU. The points shown here represent all of the trees on the campus of Colorado State University.</h3>"
     }
 };
