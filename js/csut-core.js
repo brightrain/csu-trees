@@ -12,7 +12,8 @@ $.extend(true, csut, {
     searchMarker: {},
     selectedTrees: null,
     current: {
-        selectedGeoJson: null
+        selectedGeoJson: null,
+        previousZoomLevel: 0
     },
     _handlebars: function(str, obj) {
         for (var prop in obj) {
@@ -151,9 +152,11 @@ $.extend(true, csut, {
             });
 
             this.map = L.map('map',
-            {
+                             {
                 zoomControl: false
             }).fitBounds(csut.config.csuLibraryBounds);
+            csut.current.previousZoomLevel = this.map.getZoom();
+            
             new L.Control.Zoom({ position: 'bottomleft' }).addTo(csut.map);
             //https://github.com/MrMufflon/Leaflet.Coordinates
             L.control.coordinates({
@@ -177,7 +180,7 @@ $.extend(true, csut, {
             csut.csutDynamicLayer = L.esri.dynamicMapLayer({
                 url: csut.config.mapServiceUrl,
                 opacity : 1
-            }).addTo(this.map);
+            });//.addTo(this.map);
 
             /* Add trees layer as feature layer so we can change icons and interact with them*/
             csut.treesLayer = L.esri.featureLayer({
@@ -199,18 +202,18 @@ $.extend(true, csut, {
                 .bindPopup(function(feature){
                 return csut.buildTreeContent(feature);
             }).addTo(this.map);
-            
+
             csut.searchMarker = L.circleMarker(new L.LatLng(0, 0), { color: 'red' });
             csut.mapMarker = L.circleMarker(new L.LatLng(0, 0), { color: 'yellow', opacity: 0.9, fillOpacity:0.7 });
             csut.selectedTrees = L.layerGroup().addTo(csut.map);    
-            
+
             // get tree types in map extent
             csut.getTreeTypesInCurrentExtent();
-            
+
             $(document).on("click", ".get-tree-type", function() {
                 csut.selectTreeTypeInCurrentMapExtent($(this).attr("data-tree-type"));
             });
-            
+
             $("#toggle-topo-basemap").click(function () {
                 $(this).removeClass("inactive").addClass("active");
                 $("#toggle-aerial-basemap").removeClass("active").addClass("inactive");
@@ -232,11 +235,11 @@ $.extend(true, csut, {
             $("#go-to-foothills").click(function() {
                 csut.map.fitBounds(csut.config.csuFoothillsBounds);
             });
-            
+
             $("#csut-clear-trees").click(function() {
                 csut.selectedTrees.clearLayers(); 
             });
-            
+
             $("#search-btn").click(function () {
                 if ($("#search-box").val() !== "") {
                     csut.findAndZoom($("#search-box").val());
@@ -245,9 +248,27 @@ $.extend(true, csut, {
                     csut.notify($("#search-box"), "No search term entered"); 
                 }
             });
-            csut.map.on("moveend", function() {
-                //csut.selectedTrees.clearLayers();
-                csut.getTreeTypesInCurrentExtent();
+            csut.map.on("zoomend", function() {
+                // only swap layers if the zoom has jumped our 10 threshold, it's an expensive operation
+                var currentZoom = csut.map.getZoom();
+                
+                console.log(currentZoom);
+                //$("#csu-logo-container").append("<h3>" + currentZoom + "</h3>");
+
+                //if(csut.current.previousZoomLevel >= 18 && currentZoom < 18) {
+                    if(currentZoom < 18) {
+                        csut.map.removeLayer(csut.treesLayer);
+                        csut.map.addLayer(csut.csutDynamicLayer);
+                    }
+                    else {
+                        csut.map.removeLayer(csut.csutDynamicLayer);
+                        csut.map.addLayer(csut.treesLayer);
+                    }
+                //}
+                csut.current.previousZoomLevel = currentZoom;
+            });
+            csut.map.on("moveend", function(what, a, b) {
+                csut.getTreeTypesInCurrentExtent(); 
             });
             /* Highlight search box text on click */
             $("#search-box").click(function () {
@@ -501,7 +522,7 @@ $.extend(true, csut, {
     },
     selectTreeTypeInCurrentMapExtent(treeTypeName) {
         csut.selectedTrees.clearLayers();
-                    // http://esri.github.io/esri-leaflet/api-reference/tasks/query.html
+        // http://esri.github.io/esri-leaflet/api-reference/tasks/query.html
         csut.treesLayer.query()
             .where("New_Common='" + treeTypeName + "'")
             .within(csut.map.getBounds())
@@ -524,36 +545,38 @@ $.extend(true, csut, {
                 });
             }
             else {
-             csut.notify($("#search-box"), "There are no " + datum.name +  " trees in the current map extent");  
+                csut.notify($("#search-box"), "There are no " + datum.name +  " trees in the current map extent");  
             }
         });  
     },
     getTreeTypesInCurrentExtent: function() {
         csut.treesLayer.query()
-        .within(csut.map.getBounds())
-        .run(function(error, featureCollection, response){
-        if(featureCollection.features.length>0) {
-            var types = _.uniq(featureCollection.features, function(feature, key, New_Common){
-                return feature.properties.New_Common
-            });
-            var sortedTypes = _.sortBy(types, function(type){ 
-                return type.properties.New_Common.toLowerCase();
-            });
-            var content = "";
-            sortedTypes.forEach(function(feature, index) {
-                try {
-                     content += "<button class='get-tree-type btn csut-btn' data-tree-type='" + feature.properties.New_Common + "'>" + feature.properties.New_Common + "</button>";
+            .within(csut.map.getBounds())
+            .run(function(error, featureCollection, response){
+            if(featureCollection) {
+                if(featureCollection.features.length > 0) {
+                    var types = _.uniq(featureCollection.features, function(feature, key, New_Common){
+                        return feature.properties.New_Common
+                    });
+                    var sortedTypes = _.sortBy(types, function(type){ 
+                        return type.properties.New_Common.toLowerCase();
+                    });
+                    var content = "";
+                    sortedTypes.forEach(function(feature, index) {
+                        try {
+                            content += "<button class='get-tree-type btn csut-btn' data-tree-type='" + feature.properties.New_Common + "'>" + feature.properties.New_Common + "</button>";
+                        }
+                        catch(e) {
+                            var err = e;   
+                        }
+                    });
+                    $("#sidebar-content").html(content);
                 }
-                catch(e) {
-                    var err = e;   
+                else {
+                    var content = "<i class=''>No trees in current extent</i>";
+                    $("#sidebar-content").html(content);   
                 }
-            });
-        $("#sidebar-content").html(content);
-        }
-        else {
-            var content = "<i class=''>No trees in current extent</i>";
-            $("#sidebar-content").html(content);   
-        }
+            }
         });  
     },
     notify: function(target, message) {
