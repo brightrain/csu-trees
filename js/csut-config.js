@@ -1,6 +1,7 @@
 var csut = {
     config: {
-        mapServiceUrl: "http://centroid1.acns.colostate.edu:6080/arcgis/rest/services/Trees/CSU_Trees_2013_webmerc/MapServer/",
+        //mapServiceUrl: "http://centroid1.acns.colostate.edu:6080/arcgis/rest/services/Trees/CSU_Trees_2013_webmerc/MapServer/",
+        mapServiceUrl: "https://services1.arcgis.com/KNdRU5cN6ENqCTjk/arcgis/rest/services/csu_trees/FeatureServer/",
         arcgisGeocodingBaseUrl: "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/",
         arcgisGeometryServiceUrl: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer/",
         layerIndexes: {

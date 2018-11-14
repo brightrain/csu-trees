@@ -15,24 +15,24 @@
         <link rel="stylesheet" href="css/leaflet-coordinates.css" />
     </head>
     <body>  
-        <div id="centroid-logo-container" class="csut-floater">
-            <img id="centroid-logo" src="./img/centroid-logo.png" />
-        </div>
         <div id="preloader"></div>
         <div id="meta-container" class="csut-floater">
-            <div id="csu-logo-container" class="csut-container">
+            <div id="centroid-logo-container" class="">
+                <img id="centroid-logo" src="./img/centroid-logo.png" />
                 <img id="csu-logo" src="./img/go-rams.png" />
-                <span class="csut-title">Colorado State University Trees</span>
             </div>
-            <form id="search-form" class="csut-floater" role="search">
-                <div class="form-group">
-                    <label class="control-label" for="search-box"></label>
-                    <input id="search-box" type="text" class="form-control input-lg" placeholder="Search tree IDs, types or addresses">
-                    <span id="search-icon" class="csut-icon csut-icon-map-search"></span>
-                    <span id="search-loading-icon" class=""></span>
-                </div>
-            </form>
+            <div id="csu-logo-container" class="csut-container">
+                <h2>Colorado State University Trees</h2>
+            </div>
         </div>
+        <form id="search-form" class="csut-floater" role="search">
+            <div class="form-group">
+                <label class="control-label" for="search-box"></label>
+                <input id="search-box" type="text" class="form-control input-lg" placeholder="Search tree IDs, types or addresses">
+                <span id="search-icon" class="csut-icon csut-icon-map-search"></span>
+                <span id="search-loading-icon" class=""></span>
+            </div>
+        </form>
         <div id="csut-basemap-toggle-container" class="csut-floater">
             <div id="toggle-topo-basemap" class="basemap-toggle-item active csut-container">
                 <span class="csut-icon csut-icon-map-topo"></span>

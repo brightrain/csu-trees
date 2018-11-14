@@ -176,11 +176,21 @@ $.extend(true, csut, {
                     return csut.config.selectedFeatureStyle;
                 }
             }).addTo(csut.map);
-            /**/
-            csut.csutDynamicLayer = L.esri.dynamicMapLayer({
-                url: csut.config.mapServiceUrl,
-                opacity : 1
-            });//.addTo(this.map);
+            
+            /* the layer with smaller icons so it can be shown at higher zoom levels 
+            not added to map here because off by default
+            */
+            csut.csutDynamicLayer = L.esri.featureLayer({
+                url: csut.config.mapServiceUrl + csut.config.layerIndexes.treesLayerIndex,
+                pointToLayer: function (geojson, latlng) {
+                    return L.circleMarker(latlng, {
+                        radius: 2,
+                        color: '#006400',
+                        fillOpacity: 0.5,
+                        interactive: false
+                    });
+                }
+            });
 
             /* Add trees layer as feature layer so we can change icons and interact with them*/
             csut.treesLayer = L.esri.featureLayer({
@@ -252,7 +262,7 @@ $.extend(true, csut, {
                 // only swap layers if the zoom has jumped our 10 threshold, it's an expensive operation
                 var currentZoom = csut.map.getZoom();
                 
-                console.log(currentZoom);
+                //console.log(currentZoom);
                 //$("#csu-logo-container").append("<h3>" + currentZoom + "</h3>");
 
                 //if(csut.current.previousZoomLevel >= 18 && currentZoom < 18) {
@@ -315,14 +325,15 @@ $.extend(true, csut, {
                 },
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                    url: csut.config.mapServiceUrl + "find?" +
-                    "searchText=%QUERY&contains=true&searchFields=ID" + 
-                    "&layers=0&returnGeometry=false&f=json",
+                    url: csut.config.mapServiceUrl + "0/query?" +
+                    "where=ID Like '%QUERY%'" +
+                    "&outFields=ID,FID"  +
+                    "&returnGeometry=false&f=json",
                     filter: function (data) {
-                        return $.map(data.results, function (result) {
+                        return $.map(data.features, function (feature) {
                             return {
-                                name: result.attributes.ID,
-                                objectId: result.attributes.FID,
+                                name: feature.attributes.ID,
+                                objectId: feature.attributes.FID,
                                 source: "trees"
                             };
                         });
@@ -343,15 +354,16 @@ $.extend(true, csut, {
                 },
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                    url: csut.config.mapServiceUrl + "find?" +
-                    "searchText=%QUERY&contains=true&searchFields=New_Common" + 
-                    "&layers=0&returnGeometry=false&f=json",
+                    url: csut.config.mapServiceUrl + "0/query?" +
+                    "where=New_Common Like '%%QUERY%'" +
+                    "&outFields=FID,New_Common"  +
+                    "&returnGeometry=false&f=json",
                     filter: function (data) {
-                        return $.map(data.results, function (result) {
+                        return $.map(data.features, function (feature) {
                             return {
-                                name: result.attributes.New_Common,
-                                value: result.attributes.New_Common,
-                                objectId: result.attributes.FID,
+                                name: feature.attributes.New_Common,
+                                value: feature.attributes.New_Common,
+                                objectId: feature.attributes.FID,
                                 source: "treeTypes"
                             };
                         });
@@ -457,10 +469,8 @@ $.extend(true, csut, {
                             var bounds = L.latLngBounds(ll, ll);
                             csut.map.fitBounds(bounds, {maxZoom: 20});
                             //grab the tree and create a popup
-                            L.esri.Tasks.find({ url: csut.config.mapServiceUrl })
-                                .layers("0")
-                                .text(feature.attributes.ID)
-                                .fields("ID")
+                            L.esri.Tasks.query({ url: csut.config.mapServiceUrl + "/0" })
+                                .where("ID='" + feature.attributes.ID + "'")
                                 .run(function(error, featureCollection, response) {
                                 var feature = featureCollection.features[0];
                                 L.popup({ offset: L.point(0, -15) })
