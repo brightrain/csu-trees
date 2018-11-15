@@ -151,8 +151,7 @@ $.extend(true, csut, {
                 return false;
             });
 
-            this.map = L.map('map',
-                             {
+            this.map = L.map('map',{
                 zoomControl: false
             }).fitBounds(csut.config.csuLibraryBounds);
             csut.current.previousZoomLevel = this.map.getZoom();
@@ -186,8 +185,7 @@ $.extend(true, csut, {
                     return L.circleMarker(latlng, {
                         radius: 2,
                         color: '#006400',
-                        fillOpacity: 0.5,
-                        interactive: false
+                        fillOpacity: 0.5
                     });
                 }
             });
@@ -239,8 +237,8 @@ $.extend(true, csut, {
             });
             $("#go-to-oval").click(function() {
                 csut.map.fitBounds(csut.config.csuOvalBounds);
-            });$("#go-to-hughes").click(function() {
-                csut.map.fitBounds(csut.config.csuHughesBounds);
+            });$("#go-to-canvas").click(function() {
+                csut.map.fitBounds(csut.config.csuCanvasBounds);
             });
             $("#go-to-foothills").click(function() {
                 csut.map.fitBounds(csut.config.csuFoothillsBounds);
